@@ -191,6 +191,8 @@ app.post('/api/report', authMiddleware, (req, res) => {
 const waitingPool = new Map();
 // active sessions: Map of socketId -> partnerSocketId
 const activeSessions = new Map();
+// socket user map: Map of socketId -> userId (for reports)
+const socketUserMap = new Map();
 
 function verifySocketToken(token) {
   try { return jwt.verify(token, JWT_SECRET); }
@@ -247,6 +249,7 @@ io.on('connection', (socket) => {
   const db = getDb();
   const user = db.prepare('SELECT id, username, gender, country, role, can_filter_gender, can_filter_country, filter_explicit, is_active FROM users WHERE id = ?').get(socket.userId);
   if (!user || !user.is_active) { socket.disconnect(); return; }
+  socketUserMap.set(socket.id, user.id);
 
   socket.on('find-partner', (filters = {}) => {
     // Remove from any existing session
@@ -311,7 +314,19 @@ io.on('connection', (socket) => {
     socket.emit('skipped');
   });
 
+  socket.on('report-partner', ({ reason }) => {
+    if (!reason || !reason.trim()) return;
+    const partnerSocketId = activeSessions.get(socket.id);
+    if (!partnerSocketId) return;
+    const reportedUserId = socketUserMap.get(partnerSocketId);
+    if (!reportedUserId || reportedUserId === user.id) return;
+    const db = getDb();
+    db.prepare('INSERT INTO reports (reporter_id, reported_id, reason) VALUES (?, ?, ?)')
+      .run(user.id, reportedUserId, reason.trim().slice(0, 255));
+  });
+
   socket.on('disconnect', () => {
+    socketUserMap.delete(socket.id);
     waitingPool.delete(socket.id);
     const partnerId = activeSessions.get(socket.id);
     if (partnerId) {
