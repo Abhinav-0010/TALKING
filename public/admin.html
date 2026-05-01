@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TALKING – Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar">
+      <div class="brand gradient-text">TALKING.</div>
+      <a class="admin-nav-item active" data-tab="overview" href="#">📊 Overview</a>
+      <a class="admin-nav-item" data-tab="users" href="#">👥 Users</a>
+      <a class="admin-nav-item" data-tab="reports" href="#">🚨 Reports</a>
+      <a class="admin-nav-item" data-tab="settings" href="#">⚙️ Settings</a>
+      <div style="flex:1;"></div>
+      <a class="admin-nav-item" href="/index.html">← Back to App</a>
+      <a class="admin-nav-item" id="admin-logout" href="#">🚪 Sign Out</a>
+    </nav>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- OVERVIEW TAB -->
+      <div id="tab-overview">
+        <div class="admin-header">
+          <h1>Dashboard <span class="gradient-text">Overview</span></h1>
+          <p>Platform metrics and quick actions</p>
+        </div>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card glass">
+            <div class="stat-value gradient-text" id="stat-total-users">—</div>
+            <div class="stat-label">Total Users</div>
+          </div>
+          <div class="stat-card glass">
+            <div class="stat-value" style="color:var(--green);" id="stat-active-users">—</div>
+            <div class="stat-label">Active Users</div>
+          </div>
+          <div class="stat-card glass">
+            <div class="stat-value" style="color:var(--yellow);" id="stat-total-reports">—</div>
+            <div class="stat-label">Reports</div>
+          </div>
+          <div class="stat-card glass">
+            <div class="stat-value" style="color:var(--purple);" id="stat-admins">—</div>
+            <div class="stat-label">Admins</div>
+          </div>
+        </div>
+
+        <div class="section-card glass">
+          <h2>🌍 Gender Distribution</h2>
+          <div id="gender-chart" style="display:flex;gap:16px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div id="tab-users" class="hidden">
+        <div class="admin-header">
+          <h1>User <span class="gradient-text">Management</span></h1>
+          <p>Control user access and filter permissions</p>
+        </div>
+
+        <div class="section-card glass">
+          <h2>👥 All Users</h2>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="users-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Gender</th>
+                  <th>Country</th>
+                  <th>Role</th>
+                  <th>Gender Filter</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTS TAB -->
+      <div id="tab-reports" class="hidden">
+        <div class="admin-header">
+          <h1>Content <span class="gradient-text">Reports</span></h1>
+          <p>Review reports submitted by users</p>
+        </div>
+        <div class="section-card glass">
+          <h2>🚨 Pending Reports</h2>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="reports-table">
+              <thead>
+                <tr>
+                  <th>Reporter</th>
+                  <th>Reported</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reports-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" class="hidden">
+        <div class="admin-header">
+          <h1>Platform <span class="gradient-text">Settings</span></h1>
+          <p>Global filter and content moderation settings</p>
+        </div>
+        <div class="section-card glass">
+          <h2>⚙️ Filter Settings</h2>
+          <div class="settings-grid">
+            <div class="setting-item">
+              <div>
+                <label for="s-explicit">🔞 Explicit Content Filter</label>
+                <small>Warn users before connecting when explicit content may appear</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="s-explicit" />
+                <span class="slider-track"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div>
+                <label for="s-gender">👤 Gender Filter</label>
+                <small>Allow users with permission to filter by gender</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="s-gender" />
+                <span class="slider-track"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div>
+                <label for="s-country">🌍 Country Filter</label>
+                <small>Allow users with permission to filter by country</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="s-country" />
+                <span class="slider-track"></span>
+              </label>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:20px;" id="btn-save-settings">Save Settings</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
