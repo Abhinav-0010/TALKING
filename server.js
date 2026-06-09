@@ -177,6 +177,18 @@ app.get('/api/admin/reports', authMiddleware, adminOnly, (req, res) => {
   res.json({ reports });
 });
 
+app.delete('/api/admin/reports/:id', authMiddleware, adminOnly, (req, res) => {
+  const db = getDb();
+  const reportId = Number(req.params.id);
+  if (!Number.isInteger(reportId) || reportId <= 0) {
+    return res.status(400).json({ error: 'Invalid report id' });
+  }
+
+  const result = db.prepare('DELETE FROM reports WHERE id = ?').run(reportId);
+  if (!result.changes) return res.status(404).json({ error: 'Report not found' });
+  res.json({ message: 'Report reviewed' });
+});
+
 // ─── Report Route ─────────────────────────────────────────────────────────────
 app.post('/api/report', authMiddleware, (req, res) => {
   const { reported_id, reason } = req.body;
