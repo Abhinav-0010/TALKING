@@ -155,7 +155,7 @@ async function loadReports() {
       <td><span class="pill pill-red">${esc(r.reported)}</span></td>
       <td>${esc(r.reason)}</td>
       <td style="color:var(--muted);font-size:0.8rem;">${new Date(r.created_at).toLocaleDateString()}</td>
-      <td><button class="btn btn-sm btn-ghost" data-rid="${r.id}" data-reported="${esc(r.reported)}">Review</button></td>`;
+      <td><button class="btn btn-sm btn-ghost" data-rid="${r.id}">Review</button></td>`;
     tbody.appendChild(tr);
   });
 
